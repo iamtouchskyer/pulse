@@ -8,16 +8,35 @@ interface Route {
   handler: () => Promise<{ data: unknown }> | { data: unknown };
 }
 
+// Build a mock Octokit that supports .request, .paginate, .paginate.iterator.
+// .paginate returns a single "page" as a flat array (test data is small).
+// .paginate.iterator yields one page.
 function makeMockClient(routes: Route[]): Octokit {
-  const request = vi.fn(async (route: string) => {
+  async function runRoute(route: string): Promise<{ data: unknown }> {
     for (const r of routes) {
       if (r.match.test(route)) {
         return await r.handler();
       }
     }
     throw new Error(`unmatched route: ${route}`);
-  });
-  return { request } as unknown as Octokit;
+  }
+  const request = vi.fn(runRoute);
+  const paginate = Object.assign(
+    vi.fn(async (route: string) => {
+      const res = await runRoute(route);
+      const data = res.data;
+      return Array.isArray(data) ? data : [data];
+    }),
+    {
+      iterator: (route: string) => ({
+        async *[Symbol.asyncIterator]() {
+          const res = await runRoute(route);
+          yield { data: res.data };
+        },
+      }),
+    }
+  );
+  return { request, paginate } as unknown as Octokit;
 }
 
 const repoData = {
@@ -104,6 +123,7 @@ describe("fetchSnapshot", () => {
     SnapshotSchema.parse(snap);
     expect(snap.repo).toBe("iamtouchskyer/opc");
     expect(snap.stars).toBe(42);
+    expect(snap.watchers).toBe(7); // subscribers_count, not watchers_count
     expect(snap.open_prs).toBe(3);
     expect(snap.open_issues).toBe(7); // 10 - 3
     expect(snap.recent_issues).toHaveLength(2); // PR filtered
@@ -146,6 +166,91 @@ describe("fetchSnapshot", () => {
     warnSpy.mockRestore();
   });
 
+  it("traffic 404 is NOT swallowed (bubbles to allSettled degrade)", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const notFound = (): never => {
+      const err = new Error("Not Found") as Error & { status: number };
+      err.status = 404;
+      throw err;
+    };
+    const client = makeMockClient([
+      { match: /^GET \/repos\/\{owner\}\/\{repo\}$/, handler: () => ({ data: repoData }) },
+      { match: /pulls/, handler: () => ({ data: [] }) },
+      { match: /\/issues$/, handler: () => ({ data: [] }) },
+      { match: /traffic\/views/, handler: notFound },
+      { match: /traffic\/clones/, handler: () => ({ data: { count: 0, uniques: 0 } }) },
+      { match: /traffic\/popular\/referrers/, handler: () => ({ data: [] }) },
+      { match: /traffic\/popular\/paths/, handler: () => ({ data: [] }) },
+      { match: /stargazers/, handler: () => ({ data: [] }) },
+    ]);
+    const snap = await fetchSnapshot(client, "iamtouchskyer/opc", todayUtc());
+    // 404 on views bubbles up; allSettled degrades to zeros and warns.
+    expect(snap.traffic.views_14d).toBe(0);
+    const joined = warnSpy.mock.calls.map((c) => c.join(" ")).join("\n");
+    expect(joined).toMatch(/traffic_views failed/);
+    warnSpy.mockRestore();
+  });
+
+  it("allSettled degrades single endpoint failure (pulls 500) without tanking snapshot", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const serverError = (): never => {
+      const err = new Error("boom") as Error & { status: number };
+      err.status = 500;
+      throw err;
+    };
+    const client = makeMockClient([
+      { match: /^GET \/repos\/\{owner\}\/\{repo\}$/, handler: () => ({ data: repoData }) },
+      { match: /pulls/, handler: serverError },
+      { match: /\/issues$/, handler: () => ({ data: [] }) },
+      { match: /traffic\/views/, handler: () => ({ data: { count: 0, uniques: 0 } }) },
+      { match: /traffic\/clones/, handler: () => ({ data: { count: 0, uniques: 0 } }) },
+      { match: /traffic\/popular\/referrers/, handler: () => ({ data: [] }) },
+      { match: /traffic\/popular\/paths/, handler: () => ({ data: [] }) },
+      { match: /stargazers/, handler: () => ({ data: [] }) },
+    ]);
+    const snap = await fetchSnapshot(client, "iamtouchskyer/opc", todayUtc());
+    SnapshotSchema.parse(snap);
+    expect(snap.open_prs).toBe(0); // degraded
+    expect(snap.stars).toBe(42);
+    const joined = warnSpy.mock.calls.map((c) => c.join(" ")).join("\n");
+    expect(joined).toMatch(/open_prs failed/);
+    warnSpy.mockRestore();
+  });
+
+  it("repo endpoint failure is hard-fail (spine)", async () => {
+    const client = makeMockClient([
+      {
+        match: /^GET \/repos\/\{owner\}\/\{repo\}$/,
+        handler: () => {
+          const err = new Error("boom") as Error & { status: number };
+          err.status = 500;
+          throw err;
+        },
+      },
+    ]);
+    await expect(fetchSnapshot(client, "iamtouchskyer/opc", todayUtc())).rejects.toThrow();
+  });
+
+  it("ghost stargazer maps to null login", async () => {
+    const client = makeMockClient([
+      { match: /^GET \/repos\/\{owner\}\/\{repo\}$/, handler: () => ({ data: repoData }) },
+      { match: /pulls/, handler: () => ({ data: [] }) },
+      { match: /\/issues$/, handler: () => ({ data: [] }) },
+      { match: /traffic\/views/, handler: () => ({ data: { count: 0, uniques: 0 } }) },
+      { match: /traffic\/clones/, handler: () => ({ data: { count: 0, uniques: 0 } }) },
+      { match: /traffic\/popular\/referrers/, handler: () => ({ data: [] }) },
+      { match: /traffic\/popular\/paths/, handler: () => ({ data: [] }) },
+      {
+        match: /stargazers/,
+        handler: () => ({
+          data: [{ user: null, starred_at: "2026-04-11T00:00:00Z" }],
+        }),
+      },
+    ]);
+    const snap = await fetchSnapshot(client, "iamtouchskyer/opc", todayUtc());
+    expect(snap.recent_stargazers).toEqual([null]);
+  });
+
   it("rejects invalid repo slug", async () => {
     const client = makeMockClient([]);
     await expect(fetchSnapshot(client, "no-slash", todayUtc())).rejects.toThrow(
@@ -158,6 +263,34 @@ describe("fixtureSnapshot", () => {
   it("produces valid Snapshot", () => {
     const s = fixtureSnapshot("iamtouchskyer/opc", todayUtc());
     SnapshotSchema.parse(s);
+  });
+
+  it("default captured_at is deterministic epoch string", () => {
+    const prev = process.env.PULSE_NOW;
+    delete process.env.PULSE_NOW;
+    try {
+      const s = fixtureSnapshot("iamtouchskyer/opc", "2026-04-19");
+      expect(s.captured_at).toBe("1970-01-01T00:00:00.000Z");
+    } finally {
+      if (prev !== undefined) process.env.PULSE_NOW = prev;
+    }
+  });
+
+  it("honors explicit capturedAt argument", () => {
+    const s = fixtureSnapshot("iamtouchskyer/opc", "2026-04-19", "2026-04-19T00:00:00.000Z");
+    expect(s.captured_at).toBe("2026-04-19T00:00:00.000Z");
+  });
+
+  it("honors PULSE_NOW env when no arg given", () => {
+    const prev = process.env.PULSE_NOW;
+    process.env.PULSE_NOW = "2030-01-01T12:00:00.000Z";
+    try {
+      const s = fixtureSnapshot("iamtouchskyer/opc", "2030-01-01");
+      expect(s.captured_at).toBe("2030-01-01T12:00:00.000Z");
+    } finally {
+      if (prev === undefined) delete process.env.PULSE_NOW;
+      else process.env.PULSE_NOW = prev;
+    }
   });
 });
 

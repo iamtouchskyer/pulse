@@ -59,6 +59,58 @@ describe("token loader", () => {
     expect(loadToken()).toBe("tok-quoted");
   });
 
+  it("strips leading 'export ' shell-style prefix", async () => {
+    mkdirSync(join(tmpHome, ".claude"), { recursive: true });
+    writeFileSync(
+      join(tmpHome, ".claude", ".env"),
+      "export GITHUB_TOKEN_PULSE=ghp_exportedtok\n",
+      "utf8"
+    );
+    const { loadToken } = await importToken(tmpHome);
+    expect(loadToken()).toBe("ghp_exportedtok");
+  });
+
+  it("strips trailing unquoted '# comment' from value", async () => {
+    mkdirSync(join(tmpHome, ".claude"), { recursive: true });
+    writeFileSync(
+      join(tmpHome, ".claude", ".env"),
+      "GITHUB_TOKEN_PULSE=ghp_commented # rotated 2026-04\n",
+      "utf8"
+    );
+    const { loadToken } = await importToken(tmpHome);
+    expect(loadToken()).toBe("ghp_commented");
+  });
+
+  it("warns on group-readable perms but still loads token", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    mkdirSync(join(tmpHome, ".claude"), { recursive: true });
+    const envPath = join(tmpHome, ".claude", ".env");
+    writeFileSync(envPath, "GITHUB_TOKEN_PULSE=ghp_permtest0000000000\n", "utf8");
+    const { chmodSync } = await import("node:fs");
+    chmodSync(envPath, 0o644);
+    const { loadToken } = await importToken(tmpHome);
+    expect(loadToken()).toBe("ghp_permtest0000000000");
+    const joined = warnSpy.mock.calls.map((c) => c.join(" ")).join("\n");
+    expect(joined).toMatch(/accessible by group\/other/);
+    // Token must NOT appear in warning.
+    expect(joined).not.toMatch(/ghp_permtest/);
+    warnSpy.mockRestore();
+  });
+
+  it("refuses to follow a symlink at ~/.claude/.env", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    mkdirSync(join(tmpHome, ".claude"), { recursive: true });
+    const realPath = join(tmpHome, "real.env");
+    writeFileSync(realPath, "GITHUB_TOKEN_PULSE=ghp_shouldnotleak0000\n", "utf8");
+    const { symlinkSync } = await import("node:fs");
+    symlinkSync(realPath, join(tmpHome, ".claude", ".env"));
+    const { loadTokenOrNull } = await importToken(tmpHome);
+    expect(loadTokenOrNull()).toBeNull();
+    const joined = warnSpy.mock.calls.map((c) => c.join(" ")).join("\n");
+    expect(joined).toMatch(/refusing to follow symlink/);
+    warnSpy.mockRestore();
+  });
+
   it("throws with non-leaking message when not found", async () => {
     const { loadToken } = await importToken(tmpHome);
     expect(() => loadToken()).toThrow(/GitHub token not found.*GITHUB_TOKEN_PULSE/);
