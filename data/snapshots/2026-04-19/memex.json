@@ -1,0 +1,182 @@
+{
+  "schema_version": 1,
+  "repo": "iamtouchskyer/memex",
+  "date": "2026-04-19",
+  "captured_at": "2026-04-19T12:47:52.648Z",
+  "stars": 98,
+  "forks": 18,
+  "watchers": 1,
+  "open_issues": 4,
+  "open_prs": 0,
+  "traffic": {
+    "views_14d": 877,
+    "unique_visitors_14d": 374,
+    "clones_14d": 1090
+  },
+  "top_referrers": [
+    {
+      "referrer": "github.com",
+      "count": 191,
+      "uniques": 71
+    },
+    {
+      "referrer": "t.co",
+      "count": 107,
+      "uniques": 78
+    },
+    {
+      "referrer": "pi.dev",
+      "count": 44,
+      "uniques": 16
+    },
+    {
+      "referrer": "shittycodingagent.ai",
+      "count": 33,
+      "uniques": 23
+    },
+    {
+      "referrer": "statics.teams.cdn.office.net",
+      "count": 24,
+      "uniques": 8
+    },
+    {
+      "referrer": "Bing",
+      "count": 16,
+      "uniques": 10
+    },
+    {
+      "referrer": "buildwithpi.ai",
+      "count": 13,
+      "uniques": 1
+    },
+    {
+      "referrer": "Yahoo",
+      "count": 10,
+      "uniques": 1
+    },
+    {
+      "referrer": "DuckDuckGo",
+      "count": 9,
+      "uniques": 3
+    },
+    {
+      "referrer": "memra.vercel.app",
+      "count": 6,
+      "uniques": 5
+    }
+  ],
+  "top_paths": [
+    {
+      "path": "/iamtouchskyer/memex",
+      "count": 517,
+      "uniques": 326
+    },
+    {
+      "path": "/iamtouchskyer/memex/issues",
+      "count": 45,
+      "uniques": 26
+    },
+    {
+      "path": "/iamtouchskyer/memex/tree/main/skills",
+      "count": 15,
+      "uniques": 15
+    },
+    {
+      "path": "/iamtouchskyer/memex/tree/main",
+      "count": 13,
+      "uniques": 7
+    },
+    {
+      "path": "/iamtouchskyer/memex/tree/main/src",
+      "count": 12,
+      "uniques": 11
+    },
+    {
+      "path": "/iamtouchskyer/memex/blob/main/skills/memex-organize/SKILL.md",
+      "count": 10,
+      "uniques": 7
+    },
+    {
+      "path": "/iamtouchskyer/memex/blob/HEAD/screenshot.png",
+      "count": 9,
+      "uniques": 9
+    },
+    {
+      "path": "/iamtouchskyer/memex/blob/main/docs/images/graph-view.png",
+      "count": 8,
+      "uniques": 8
+    },
+    {
+      "path": "/iamtouchskyer/memex/tree/main/pi-extension",
+      "count": 8,
+      "uniques": 8
+    },
+    {
+      "path": "/iamtouchskyer/memex/blob/main/screenshot.png",
+      "count": 7,
+      "uniques": 7
+    }
+  ],
+  "recent_issues": [
+    {
+      "number": 57,
+      "title": "What would happen when the number of notes skyrockets?",
+      "author": "avinashkanaujiya",
+      "created_at": "2026-04-14T00:36:37Z",
+      "comments": 9
+    },
+    {
+      "number": 51,
+      "title": "Bug: memex sync push/pull re-initializes with literal 'push' or 'pull' as remote URL (npm v0.1.28)",
+      "author": "gaodes",
+      "created_at": "2026-04-13T01:59:13Z",
+      "comments": 9
+    },
+    {
+      "number": 45,
+      "title": "🚧 CI: Release工作流与分支保护规则冲突",
+      "author": "iamtouchskyer",
+      "created_at": "2026-04-06T03:32:14Z",
+      "comments": 10
+    },
+    {
+      "number": 42,
+      "title": "🔧 CI: npm 自动发布失败 - 缺少认证配置",
+      "author": "iamtouchskyer",
+      "created_at": "2026-04-03T16:03:07Z",
+      "comments": 20
+    }
+  ],
+  "recent_stargazers": [
+    "bamecho",
+    "LouisShark",
+    "pixelxzen",
+    "songoow",
+    "DrayChou",
+    "kaichen",
+    "overstarry",
+    "liuyatao",
+    "SuriXing",
+    "dcalsky",
+    "moon2l",
+    "empjustine",
+    "nowherekai",
+    "alexleekt",
+    "Peng-YM",
+    "jordyvandomselaar",
+    "marcelreschke",
+    "ninehills",
+    "edisonX-sudo",
+    "avinashkanaujiya",
+    "enriqueleon80",
+    "shelken",
+    "Zpankz",
+    "evertonstz",
+    "kamilchm",
+    "mkjasinski",
+    "elviscai",
+    "stemorelk5",
+    "maricela-anderson616c",
+    "petduprey3"
+  ]
+}

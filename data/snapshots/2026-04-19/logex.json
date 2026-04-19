@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "repo": "iamtouchskyer/logex",
+  "date": "2026-04-19",
+  "captured_at": "2026-04-19T12:47:53.067Z",
+  "stars": 1,
+  "forks": 0,
+  "watchers": 0,
+  "open_issues": 0,
+  "open_prs": 0,
+  "traffic": {
+    "views_14d": 4,
+    "unique_visitors_14d": 4,
+    "clones_14d": 411
+  },
+  "top_referrers": [
+    {
+      "referrer": "github.com",
+      "count": 2,
+      "uniques": 2
+    }
+  ],
+  "top_paths": [
+    {
+      "path": "/iamtouchskyer/logex",
+      "count": 3,
+      "uniques": 3
+    },
+    {
+      "path": "/iamtouchskyer/logex/tree/main/src",
+      "count": 1,
+      "uniques": 1
+    }
+  ],
+  "recent_issues": [],
+  "recent_stargazers": [
+    "iamtouchskyer"
+  ]
+}

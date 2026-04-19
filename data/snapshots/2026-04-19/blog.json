@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "repo": "iamtouchskyer/blog",
+  "date": "2026-04-19",
+  "captured_at": "2026-04-19T12:47:53.482Z",
+  "stars": 1,
+  "forks": 0,
+  "watchers": 0,
+  "open_issues": 0,
+  "open_prs": 0,
+  "traffic": {
+    "views_14d": 16,
+    "unique_visitors_14d": 11,
+    "clones_14d": 614
+  },
+  "top_referrers": [
+    {
+      "referrer": "github.com",
+      "count": 11,
+      "uniques": 6
+    }
+  ],
+  "top_paths": [
+    {
+      "path": "/iamtouchskyer/blog",
+      "count": 10,
+      "uniques": 10
+    },
+    {
+      "path": "/iamtouchskyer/blog/tree/main/src/content",
+      "count": 2,
+      "uniques": 1
+    },
+    {
+      "path": "/iamtouchskyer/blog/discussions/1",
+      "count": 1,
+      "uniques": 1
+    },
+    {
+      "path": "/iamtouchskyer/blog/tree/main/public",
+      "count": 1,
+      "uniques": 1
+    },
+    {
+      "path": "/iamtouchskyer/blog/tree/main/src",
+      "count": 1,
+      "uniques": 1
+    },
+    {
+      "path": "/iamtouchskyer/blog/tree/main/src/components",
+      "count": 1,
+      "uniques": 1
+    }
+  ],
+  "recent_issues": [],
+  "recent_stargazers": [
+    "Philliprince"
+  ]
+}
