@@ -17,8 +17,12 @@ describe("RuleSchema discriminated union", () => {
   test("watchlist_signal happy", () => {
     expect(RuleSchema.parse({ type: "watchlist_signal" })).toBeTruthy();
   });
-  test("unknown type fails", () => {
-    expect(() => RuleSchema.parse({ type: "bogus" })).toThrow();
+  test("unknown type fails with invalid_union_discriminator", () => {
+    const result = RuleSchema.safeParse({ type: "bogus" });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0]?.code).toBe("invalid_union_discriminator");
+    }
   });
   test("missing required field (uniques_threshold)", () => {
     expect(() => RuleSchema.parse({ type: "new_referrer_domain" })).toThrow();
@@ -26,8 +30,17 @@ describe("RuleSchema discriminated union", () => {
   test("wrong type for sigma", () => {
     expect(() => RuleSchema.parse({ type: "star_velocity_spike", sigma: "high" })).toThrow();
   });
+  test("sigma must be positive (reject -1)", () => {
+    expect(() => RuleSchema.parse({ type: "star_velocity_spike", sigma: -1 })).toThrow();
+  });
+  test("sigma must be positive (reject 0)", () => {
+    expect(() => RuleSchema.parse({ type: "star_velocity_spike", sigma: 0 })).toThrow();
+  });
   test("missing age_hours on unanswered_issue", () => {
     expect(() => RuleSchema.parse({ type: "unanswered_issue" })).toThrow();
+  });
+  test("age_hours must be positive (reject 0)", () => {
+    expect(() => RuleSchema.parse({ type: "unanswered_issue", age_hours: 0 })).toThrow();
   });
 });
 

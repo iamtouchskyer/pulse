@@ -1,10 +1,13 @@
 {
-  "tick": 1,
-  "unit": "U1.0",
-  "description": "monorepo scaffold + PULSE_GH_TOKEN secret set",
-  "status": "in_progress",
-  "artifacts": ["package.json", "tsconfig.json", ".eslintrc.cjs", ".husky/pre-commit"],
-  "next_unit": "U2.0",
+  "tick": 3,
+  "unit": "U3.0",
+  "description": "U3 review: backend ITERATE (2🔴 ghost-user, 8🟡), architect PASS (4🟡)",
+  "status": "completed",
+  "artifacts": [
+    ".harness/nodes/U3.0/run_1/eval-backend.md",
+    ".harness/nodes/U3.0/run_1/eval-architect.md"
+  ],
+  "next_unit": "U4.0",
   "blockers": [],
   "review_of_previous": "",
   "plan_file": ".harness/plan.md",
@@ -31,13 +34,24 @@
   ],
   "_written_by": "opc-harness",
   "_plan_hash": "33a5de6500e10ebd",
-  "_last_modified": "2026-04-19T11:04:20.800Z",
-  "_git_head": "d868173b857f2696ff38d578688e48a11992d76f",
+  "_last_modified": "2026-04-19T11:13:34.685Z",
+  "_git_head": "ad47f3efa4398de95428a02e80a41e865630804a",
   "_tick_history": [
     {
       "unit": "U1.0",
       "tick": 1,
       "status": "completed"
+    },
+    {
+      "unit": "U2.0",
+      "tick": 2,
+      "status": "completed"
+    },
+    {
+      "unit": "U3.0",
+      "tick": 3,
+      "status": "completed",
+      "verdict": "FAIL"
     }
   ],
   "_max_total_ticks": 54,
@@ -49,5 +63,9 @@
     "test_script": false,
     "lint_script": false,
     "typecheck_script": false
+  },
+  "_last_review_evals": {
+    ".harness/nodes/U3.0/run_1/eval-backend.md": "a82ea33ba7426e2e",
+    ".harness/nodes/U3.0/run_1/eval-architect.md": "24a3b0966e7f58d8"
   }
 }

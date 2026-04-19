@@ -1,7 +1,10 @@
 import { z } from "zod";
+import { RuleTypeSchema } from "./rule.js";
 
+// v1: severity locked to info|warn; v2 may widen to include "critical".
 export const AlertSchema = z.object({
-  rule: z.string(),
+  schema_version: z.literal(1),
+  rule: RuleTypeSchema,
   repo: z.string().regex(/^[^/]+\/[^/]+$/),
   severity: z.enum(["info", "warn"]),
   message: z.string(),

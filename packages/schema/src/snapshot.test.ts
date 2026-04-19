@@ -8,6 +8,7 @@ import {
 } from "./snapshot.js";
 
 const validSnapshot = {
+  schema_version: 1 as const,
   repo: "iamtouchskyer/opc",
   date: "2026-04-19",
   captured_at: "2026-04-19T06:17:00Z",
@@ -77,6 +78,28 @@ describe("RecentIssueSchema", () => {
   test("happy", () => {
     expect(RecentIssueSchema.parse(validSnapshot.recent_issues[0])).toBeTruthy();
   });
+  test("author nullable (ghost user)", () => {
+    expect(
+      RecentIssueSchema.parse({
+        number: 1,
+        title: "t",
+        author: null,
+        created_at: "2026-04-18T10:00:00Z",
+        comments: 0,
+      })
+    ).toBeTruthy();
+  });
+  test("number must be positive (reject 0)", () => {
+    expect(() =>
+      RecentIssueSchema.parse({
+        number: 0,
+        title: "t",
+        author: "a",
+        created_at: "2026-04-18T10:00:00Z",
+        comments: 0,
+      })
+    ).toThrow();
+  });
   test("missing", () => {
     expect(() => RecentIssueSchema.parse({ number: 1, title: "t", author: "a" })).toThrow();
   });
@@ -97,6 +120,14 @@ describe("SnapshotSchema", () => {
   test("happy path", () => {
     expect(SnapshotSchema.parse(validSnapshot)).toEqual(validSnapshot);
   });
+  test("missing schema_version", () => {
+    const rest: Record<string, unknown> = { ...validSnapshot };
+    delete rest.schema_version;
+    expect(() => SnapshotSchema.parse(rest)).toThrow();
+  });
+  test("schema_version must be 1", () => {
+    expect(() => SnapshotSchema.parse({ ...validSnapshot, schema_version: 2 })).toThrow();
+  });
   test("missing required field (stars)", () => {
     const rest: Record<string, unknown> = { ...validSnapshot };
     delete rest.stars;
@@ -113,5 +144,51 @@ describe("SnapshotSchema", () => {
   });
   test("invalid captured_at", () => {
     expect(() => SnapshotSchema.parse({ ...validSnapshot, captured_at: "yesterday" })).toThrow();
+  });
+  test("ghost stargazer entry (null) accepted", () => {
+    expect(
+      SnapshotSchema.parse({
+        ...validSnapshot,
+        recent_stargazers: ["userA", null, "userB"],
+      })
+    ).toBeTruthy();
+  });
+  test("ghost issue author (null) accepted at snapshot level", () => {
+    expect(
+      SnapshotSchema.parse({
+        ...validSnapshot,
+        recent_issues: [
+          {
+            number: 99,
+            title: "ghost",
+            author: null,
+            created_at: "2026-04-18T10:00:00Z",
+            comments: 0,
+          },
+        ],
+      })
+    ).toBeTruthy();
+  });
+  test("top_referrers max 10", () => {
+    const eleven = Array.from({ length: 11 }, (_, i) => ({
+      referrer: `r${i}`,
+      count: 1,
+      uniques: 1,
+    }));
+    expect(() => SnapshotSchema.parse({ ...validSnapshot, top_referrers: eleven })).toThrow();
+  });
+  test("top_paths max 10", () => {
+    const eleven = Array.from({ length: 11 }, (_, i) => ({
+      path: `/p${i}`,
+      count: 1,
+      uniques: 1,
+    }));
+    expect(() => SnapshotSchema.parse({ ...validSnapshot, top_paths: eleven })).toThrow();
+  });
+  test("recent_stargazers max 30", () => {
+    const thirtyOne = Array.from({ length: 31 }, (_, i) => `u${i}`);
+    expect(() =>
+      SnapshotSchema.parse({ ...validSnapshot, recent_stargazers: thirtyOne })
+    ).toThrow();
   });
 });

@@ -2,7 +2,8 @@ import { describe, expect, test } from "vitest";
 import { AlertSchema } from "./alert.js";
 
 const valid = {
-  rule: "active_fork",
+  schema_version: 1 as const,
+  rule: "active_fork" as const,
   repo: "iamtouchskyer/opc",
   severity: "info" as const,
   message: "fork activity detected",
@@ -13,6 +14,14 @@ const valid = {
 describe("AlertSchema", () => {
   test("happy path", () => {
     expect(AlertSchema.parse(valid)).toEqual(valid);
+  });
+  test("missing schema_version", () => {
+    const rest: Record<string, unknown> = { ...valid };
+    delete rest.schema_version;
+    expect(() => AlertSchema.parse(rest)).toThrow();
+  });
+  test("rule must be a known RuleType (reject bogus)", () => {
+    expect(() => AlertSchema.parse({ ...valid, rule: "bogus_rule" })).toThrow();
   });
   test("missing required field (rule)", () => {
     const rest: Record<string, unknown> = { ...valid };

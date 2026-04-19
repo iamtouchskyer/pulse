@@ -11,7 +11,8 @@ export const WeeklyRepoEntrySchema = z.object({
 export type WeeklyRepoEntry = z.infer<typeof WeeklyRepoEntrySchema>;
 
 export const WeeklyReportSchema = z.object({
-  iso_week: z.string().regex(/^\d{4}-W\d{2}$/),
+  schema_version: z.literal(1),
+  iso_week: z.string().regex(/^\d{4}-W(0[1-9]|[1-4]\d|5[0-3])$/),
   generated_at: z.string().datetime(),
   repos: z.array(WeeklyRepoEntrySchema),
   alerts: z.array(AlertSchema),

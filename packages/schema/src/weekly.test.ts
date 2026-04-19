@@ -10,12 +10,14 @@ const validEntry = {
 };
 
 const validReport = {
+  schema_version: 1 as const,
   iso_week: "2026-W16",
   generated_at: "2026-04-19T08:00:00Z",
   repos: [validEntry],
   alerts: [
     {
-      rule: "active_fork",
+      schema_version: 1 as const,
+      rule: "active_fork" as const,
       repo: "iamtouchskyer/opc",
       severity: "info" as const,
       message: "msg",
@@ -46,6 +48,11 @@ describe("WeeklyReportSchema", () => {
   test("happy path", () => {
     expect(WeeklyReportSchema.parse(validReport)).toEqual(validReport);
   });
+  test("missing schema_version", () => {
+    const rest: Record<string, unknown> = { ...validReport };
+    delete rest.schema_version;
+    expect(() => WeeklyReportSchema.parse(rest)).toThrow();
+  });
   test("missing iso_week", () => {
     const rest: Record<string, unknown> = { ...validReport };
     delete rest.iso_week;
@@ -53,6 +60,18 @@ describe("WeeklyReportSchema", () => {
   });
   test("invalid iso_week format", () => {
     expect(() => WeeklyReportSchema.parse({ ...validReport, iso_week: "2026-16" })).toThrow();
+  });
+  test("iso_week W00 rejected", () => {
+    expect(() => WeeklyReportSchema.parse({ ...validReport, iso_week: "2026-W00" })).toThrow();
+  });
+  test("iso_week W01 accepted", () => {
+    expect(WeeklyReportSchema.parse({ ...validReport, iso_week: "2026-W01" })).toBeTruthy();
+  });
+  test("iso_week W53 accepted", () => {
+    expect(WeeklyReportSchema.parse({ ...validReport, iso_week: "2026-W53" })).toBeTruthy();
+  });
+  test("iso_week W54 rejected", () => {
+    expect(() => WeeklyReportSchema.parse({ ...validReport, iso_week: "2026-W54" })).toThrow();
   });
   test("invalid generated_at", () => {
     expect(() => WeeklyReportSchema.parse({ ...validReport, generated_at: "later" })).toThrow();
