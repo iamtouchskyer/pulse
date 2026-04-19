@@ -1,15 +1,13 @@
 {
-  "tick": 4,
-  "unit": "U4.0",
-  "description": "fixed U3 review: backend-1/2 ghost users nullable, backend-w1..w8 bounded arrays/sigma positive/iso_week regex/Alert.rule enum, architect-w1..w3 schema_version",
-  "status": "completed",
+  "tick": 18,
+  "unit": "U18.0",
+  "description": "Pipeline complete at tick 18",
+  "status": "pipeline_complete",
   "artifacts": [
-    "packages/schema/src/snapshot.ts",
-    "packages/schema/src/rule.ts",
-    "packages/schema/src/alert.ts",
-    "packages/schema/src/weekly.ts"
+    ".harness/nodes/U18.0/run_1/acceptance-report.md",
+    ".harness/nodes/U18.0/run_1/handshake.json"
   ],
-  "next_unit": "U5.0",
+  "next_unit": null,
   "blockers": [],
   "review_of_previous": "",
   "plan_file": ".harness/plan.md",
@@ -36,8 +34,8 @@
   ],
   "_written_by": "opc-harness",
   "_plan_hash": "33a5de6500e10ebd",
-  "_last_modified": "2026-04-19T11:18:59.146Z",
-  "_git_head": "c2b47356b39cd7756d6611d9de59f1c26ea9e98a",
+  "_last_modified": "2026-04-19T12:49:52.115Z",
+  "_git_head": "922f3c09f4fd569eb8bfce9c96fdd6c8345134b0",
   "_tick_history": [
     {
       "unit": "U1.0",
@@ -59,6 +57,79 @@
       "unit": "U4.0",
       "tick": 4,
       "status": "completed"
+    },
+    {
+      "unit": "U5.0",
+      "tick": 5,
+      "status": "completed"
+    },
+    {
+      "unit": "U6.0",
+      "tick": 6,
+      "status": "completed",
+      "verdict": "ITERATE"
+    },
+    {
+      "unit": "U7.0",
+      "tick": 7,
+      "status": "completed"
+    },
+    {
+      "unit": "U8.0",
+      "tick": 8,
+      "status": "completed"
+    },
+    {
+      "unit": "U9.0",
+      "tick": 9,
+      "status": "completed",
+      "verdict": "PASS"
+    },
+    {
+      "unit": "U10.0",
+      "tick": 10,
+      "status": "completed"
+    },
+    {
+      "unit": "U11.0",
+      "tick": 11,
+      "status": "completed"
+    },
+    {
+      "unit": "U12.0",
+      "tick": 12,
+      "status": "completed"
+    },
+    {
+      "unit": "U13.0",
+      "tick": 13,
+      "status": "completed",
+      "verdict": "PASS"
+    },
+    {
+      "unit": "U14.0",
+      "tick": 14,
+      "status": "completed"
+    },
+    {
+      "unit": "U15.0",
+      "tick": 15,
+      "status": "completed"
+    },
+    {
+      "unit": "U16.0",
+      "tick": 16,
+      "status": "completed"
+    },
+    {
+      "unit": "U17.0",
+      "tick": 17,
+      "status": "completed"
+    },
+    {
+      "unit": "U18.0",
+      "tick": 18,
+      "status": "completed"
     }
   ],
   "_max_total_ticks": 54,
@@ -72,7 +143,7 @@
     "typecheck_script": false
   },
   "_last_review_evals": {
-    ".harness/nodes/U3.0/run_1/eval-backend.md": "d8b26fdb1bf8482c",
-    ".harness/nodes/U3.0/run_1/eval-architect.md": "0b6a3fe0403bab31"
+    ".harness/nodes/U13.0/run_1/eval-designer.md": "1aaabf8a0024c744",
+    ".harness/nodes/U13.0/run_1/eval-a11y.md": "82e4731189f6bfe2"
   }
 }

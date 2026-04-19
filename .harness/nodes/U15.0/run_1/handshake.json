@@ -1,0 +1,65 @@
+{
+  "unit": "U15.0",
+  "run": 1,
+  "commit": "0e8a909c17cd6b711ec987a25941454db61ef312",
+  "status": "pass",
+  "summary": "Playwright e2e + axe-core a11y suite for Pulse dashboard. Real Astro dev server via webServer. 8/8 tests pass.",
+  "tests": {
+    "files": [
+      "packages/web/tests/e2e/cards.spec.ts",
+      "packages/web/tests/e2e/empty.spec.ts",
+      "packages/web/tests/e2e/responsive.spec.ts"
+    ],
+    "results": {
+      "cards.spec.ts": { "passed": 4, "failed": 0, "skipped": 0 },
+      "empty.spec.ts": { "passed": 2, "failed": 0, "skipped": 0 },
+      "responsive.spec.ts": { "passed": 2, "failed": 0, "skipped": 0 }
+    },
+    "total": "8 passed (3.2s)",
+    "command": "bun run test:e2e (in packages/web) or bun run test:e2e (root)"
+  },
+  "axe": {
+    "tags": ["wcag2a", "wcag2aa", "wcag21aa"],
+    "gate": "zero critical/serious violations",
+    "current_violations": { "critical": 0, "serious": 0 },
+    "fixes_applied": [
+      "global.css: footer <a> now has text-decoration:underline to resolve axe 'link-in-text-block' serious violation (color-contrast + no underline for inline link)"
+    ]
+  },
+  "artifacts": {
+    "screenshots": [
+      "packages/web/test-results/cards-1440.png",
+      "packages/web/test-results/cards-375.png"
+    ],
+    "report": "packages/web/playwright-report/index.html"
+  },
+  "fixtures": {
+    "location": "packages/web/tests/e2e/__fixtures__/snapshots/2026-04-19/",
+    "files": ["opc.json", "memex.json", "logex.json", "blog.json"],
+    "seeding_strategy": "global-setup.ts backs up real data/snapshots → spec beforeAll seedSnapshots() / clearSnapshots() → global-teardown.ts restores. Single worker, fullyParallel:false to avoid concurrent seeding conflicts.",
+    "real_data_restored_post_run": true
+  },
+  "deps_added": {
+    "packages/web/devDependencies": [
+      "@playwright/test ^1.59.1",
+      "@axe-core/playwright ^4.11.2",
+      "axe-core ^4.11.3"
+    ],
+    "browsers": "chromium (via ~/Library/Caches/ms-playwright/chromium-1217)"
+  },
+  "scripts_added": {
+    "packages/web/package.json": ["test:e2e", "test:e2e:ui"],
+    "root package.json": ["test:e2e (delegates via bun --filter)"]
+  },
+  "gitignore_updates": [
+    "packages/web/test-results/",
+    "packages/web/playwright-report/",
+    "packages/web/.playwright/",
+    "data/.snapshots.e2e-backup/"
+  ],
+  "notes": [
+    "First run initially failed on a11y gate with one serious violation (link-in-text-block for footer Astro link). Fixed root cause in global.css, not test. Gate is a real build blocker working as designed.",
+    "Keyboard-tab test checks every focusable element (footer link) for focus ring via outline + outline-style + box-shadow; auto-skips if page has no focusables.",
+    "Mobile project (chromium-mobile/iPhone SE) defined in config but disabled for this run — responsive.spec covers both 1440 and 375 viewports within desktop project via setViewportSize."
+  ]
+}

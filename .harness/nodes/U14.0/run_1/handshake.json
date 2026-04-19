@@ -1,0 +1,36 @@
+{
+  "unit": "U14.0",
+  "run": 1,
+  "baseline_commit": "c0b118f",
+  "commit": "11a66726969748cf15bed0fa1e47eee525390727",
+  "status": "complete",
+  "closed_findings": {
+    "designer": ["R1", "Y1", "Y2", "Y3"],
+    "a11y": ["R1", "R2", "Y3"]
+  },
+  "skipped_findings": {
+    "designer": {
+      "Y4": "min-height preemptive — not a current bug; defer.",
+      "B1-B6": "blue nits, no review demand."
+    },
+    "a11y": {
+      "Y1": "<dl> AT pairing — left as-is; non-blocking and visible label/value pairing is unambiguous.",
+      "Y2": "focus ring color borderline — not a failure (passes contrast); defer.",
+      "B1-B12": "blue nits, no review demand."
+    },
+    "tooling": {
+      "astro-eslint-parser": "not cited by either eval; lint already green."
+    }
+  },
+  "screenshots": {
+    "cards_light": ".harness/nodes/U14.0/run_1/screenshot-cards-light.png",
+    "cards_dark": ".harness/nodes/U14.0/run_1/screenshot-cards-dark.png",
+    "empty": ".harness/nodes/U14.0/run_1/screenshot-empty.png"
+  },
+  "verification": {
+    "build": "bun run build (packages/web) — ok",
+    "lint": "bun run lint (root) — ok",
+    "tests": "168 tests, 158 pass / 10 fail. Failures pre-exist on baseline c0b118f (CLI token.test.ts uses vi.resetModules against bun:test). Unrelated to U14 scope.",
+    "viewport": "1440x900"
+  }
+}

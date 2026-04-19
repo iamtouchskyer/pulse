@@ -1,0 +1,65 @@
+{
+  "unit": "U12.0",
+  "run": 1,
+  "commit_sha": "c0b118f12767fb631d1cbc841e39c60943626d47",
+  "scope": "packages/web — Astro dashboard (SSG) with 4 repo cards + empty state",
+  "files": [
+    "packages/web/package.json",
+    "packages/web/tsconfig.json",
+    "packages/web/astro.config.mjs",
+    "packages/web/src/config.ts",
+    "packages/web/src/lib/loadSnapshots.ts",
+    "packages/web/src/pages/index.astro",
+    "packages/web/src/components/RepoCard.astro",
+    "packages/web/src/components/EmptyState.astro",
+    "packages/web/src/styles/global.css",
+    "packages/web/public/favicon.ico",
+    ".eslintignore",
+    ".prettierrc.json",
+    "package.json"
+  ],
+  "build": {
+    "cmd": "cd packages/web && bun run build",
+    "output": "static",
+    "tail": [
+      "20:15:32 [build] output: \"static\"",
+      "20:15:32 [build] ✓ Completed in 594ms.",
+      "20:15:32 ▶ src/pages/index.astro",
+      "20:15:32   └─ /index.html (+3ms)",
+      "20:15:32 [build] 1 page(s) built in 292ms",
+      "20:15:32 [build] Complete!"
+    ]
+  },
+  "smoke_empty_state": {
+    "note": "With no data/snapshots dir, build renders EmptyState.",
+    "title": "<title>Pulse — OSS Radar</title>",
+    "empty_marker": "<section class=\"empty\" data-testid=\"empty-state\" role=\"status\" aria-live=\"polite\" data-astro-cid-2ycjsuqk>",
+    "favicon": "dist/favicon.ico (served)"
+  },
+  "smoke_cards_state": {
+    "note": "Populated data/snapshots/2026-04-19 with 4 sample snapshots, rebuilt, observed 4 repo-card articles in fixed order (opc, memex, logex, blog). Sample data then removed.",
+    "count": 4,
+    "articles": [
+      "<article class=\"card\" data-testid=\"repo-card\" aria-label=\"Repository opc\" data-astro-cid-rzfmso52>",
+      "<article class=\"card\" data-testid=\"repo-card\" aria-label=\"Repository memex\" data-astro-cid-rzfmso52>",
+      "<article class=\"card\" data-testid=\"repo-card\" aria-label=\"Repository logex\" data-astro-cid-rzfmso52>",
+      "<article class=\"card\" data-testid=\"repo-card\" aria-label=\"Repository blog\" data-astro-cid-rzfmso52>"
+    ]
+  },
+  "checks": {
+    "lint": "pass (bun run lint)",
+    "typecheck": "pass (tsc --noEmit)",
+    "test": "pass (168/168 vitest)",
+    "secrets_in_bundle": "none (grep GITHUB_TOKEN/ghp_/ghs_/SLACK_WEBHOOK in dist/ → 0 hits)",
+    "output_mode": "static",
+    "private_package": true,
+    "favicon_served": true,
+    "title_set": true,
+    "focus_ring": "*:focus-visible in global.css"
+  },
+  "followups": [
+    "U14: add astro-eslint-parser & remove *.astro from .eslintignore",
+    "U15: Playwright/axe-core a11y + screenshot verification"
+  ],
+  "status": "ready"
+}

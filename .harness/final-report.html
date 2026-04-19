@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OPC Report</title>
+<style>
+:root{--bg:#0a0a0f;--surface:#12121a;--surface2:#1a1a26;--border:#2a2a3a;--text:#e4e4ef;--text-dim:#8888a0;--accent:#6366f1;--green:#22c55e;--yellow:#eab308;--red:#ef4444;--blue:#3b82f6}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;padding:2rem}
+.container{max-width:1200px;margin:0 auto}
+.header{text-align:center;padding:3rem 2rem;background:linear-gradient(135deg,rgba(99,102,241,.15),rgba(79,70,229,.05));border-radius:16px;border:1px solid var(--border);margin-bottom:2rem}
+.header h1{font-size:2rem;font-weight:700;letter-spacing:-0.02em}
+.header .subtitle{color:var(--text-dim);margin-top:.5rem;font-size:1.1rem}
+.header .date{color:var(--accent);margin-top:.5rem;font-size:.9rem}
+.section{margin-bottom:2rem}
+.section-title{font-size:1.3rem;font-weight:600;margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.5rem}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1rem}
+
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:2rem}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem;text-align:center}
+.stat-card .number{font-size:2.2rem;font-weight:700;line-height:1}
+.stat-card .label{font-size:.85rem;color:var(--text-dim);margin-top:.25rem}
+
+/* Pipeline */
+.pipeline{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;padding:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:2rem;overflow-x:auto}
+.pipe-node{padding:.5rem 1rem;border-radius:8px;font-size:.8rem;font-weight:600;border:1px solid var(--border);background:var(--surface2);white-space:nowrap;position:relative}
+.pipe-node.active{border-color:var(--accent);box-shadow:0 0 12px rgba(99,102,241,.2)}
+.pipe-arrow{color:var(--text-dim);font-size:1.1rem;user-select:none}
+
+/* Findings table */
+.findings-table{width:100%;border-collapse:collapse;font-size:.9rem}
+.findings-table th{text-align:left;padding:.6rem .8rem;border-bottom:2px solid var(--border);color:var(--text-dim);font-weight:500;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em}
+.findings-table td{padding:.6rem .8rem;border-bottom:1px solid var(--border);vertical-align:top}
+.findings-table tr:last-child td{border-bottom:none}
+.findings-table .sev{font-size:1.1rem;text-align:center;width:2.5rem}
+.findings-table .loc{color:var(--text-dim);font-size:.8rem;font-family:'SF Mono',Menlo,monospace}
+
+/* Badge */
+.badge{display:inline-block;padding:.15rem .6rem;border-radius:6px;font-size:.75rem;font-weight:600;letter-spacing:.03em}
+
+/* Node card */
+.node-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1rem}
+.node-header h3{font-size:1.05rem;font-weight:600}
+
+/* R2 */
+.r2-card{display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:.75rem}
+.r2-card .counselor{font-weight:600;min-width:160px}
+.r2-fix-counts{display:flex;gap:.75rem;font-size:.85rem}
+.r2-fix-counts span{padding:.15rem .5rem;border-radius:5px}
+
+/* Fix list */
+.fix-item{display:flex;gap:.75rem;padding:.6rem 0;border-bottom:1px solid rgba(42,42,58,.5);font-size:.9rem}
+.fix-item:last-child{border-bottom:none}
+.fix-icon{font-size:1rem;flex-shrink:0;margin-top:.1rem}
+.fix-title{flex:1}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<h1>OPC Report</h1>
+<div class="subtitle">Pipeline complete at tick 18</div>
+<div class="date">April 19, 2026 &middot; <code style="font-size:.8rem;opacity:.6">922f3c09</code></div>
+<div style="margin-top:1rem"><span class="badge" style="background:rgba(34,197,94,0.12);color:var(--green);font-size:1rem;padding:.3rem 1.2rem">PASS</span></div>
+</div>
+<div class="section">
+<div class="section-title">📊 Pipeline Flow</div>
+<div class="pipeline"><div class="pipe-node" style="border-color:var(--green);background:rgba(34,197,94,.08)">⚙️ U1.0</div><span class="pipe-arrow">→</span><div class="pipe-node" style="border-color:var(--green);background:rgba(34,197,94,.08)">⚙️ U2.0</div><span class="pipe-arrow">→</span><div class="pipe-node" style="border-color:var(--green);background:rgba(34,197,94,.08)">🔍 U3.0</div><span class="pipe-arrow">→</span><div class="pipe-node" style="border-color:var(--green);background:rgba(34,197,94,.08)">🔧 U4.0</div><span class="pipe-arrow">→</span><div class="pipe-node" style="border-color:var(--green);background:rgba(34,197,94,.08)">⚙️ U5.0</div><span class="pipe-arrow">→</span><div class="pipe-node" style="border-color:var(--green);background:rgba(34,197,94,.08)">🔍 U6.0</div><span class="pipe-arrow">→</span><div class="pipe-node" style="border-color:var(--green);background:rgba(34,197,94,.08)">🔧 U7.0</div><span class="pipe-arrow">→</span><div class="pipe-node" style="border-color:var(--green);background:rgba(34,197,94,.08)">⚙️ U8.0</div><span class="pipe-arrow">→</span><div class="pipe-node" style="border-color:var(--green);background:rgba(34,197,94,.08)">🔍 U9.0</div><span class="pipe-arrow">→</span><div class="pipe-node" style="border-color:var(--green);background:rgba(34,197,94,.08)">🔧 U10.0</div><span class="pipe-arrow">→</span><div class="pipe-node" style="border-color:var(--green);background:rgba(34,197,94,.08)">⚙️ U11.0</div><span class="pipe-arrow">→</span><div class="pipe-node" style="border-color:var(--green);background:rgba(34,197,94,.08)">⚙️ U12.0</div><span class="pipe-arrow">→</span><div class="pipe-node" style="border-color:var(--green);background:rgba(34,197,94,.08)">🔍 U13.0</div><span class="pipe-arrow">→</span><div class="pipe-node" style="border-color:var(--green);background:rgba(34,197,94,.08)">🔧 U14.0</div><span class="pipe-arrow">→</span><div class="pipe-node" style="border-color:var(--green);background:rgba(34,197,94,.08)">⚙️ U15.0</div><span class="pipe-arrow">→</span><div class="pipe-node" style="border-color:var(--green);background:rgba(34,197,94,.08)">⚙️ U16.0</div><span class="pipe-arrow">→</span><div class="pipe-node" style="border-color:var(--green);background:rgba(34,197,94,.08)">⚙️ U17.0</div><span class="pipe-arrow">→</span><div class="pipe-node" style="border-color:var(--green);background:rgba(34,197,94,.08)">⚙️ U18.0</div></div>
+</div>
+<div class="stats"><div class="stat-card">
+<div class="number" style="color:var(--red)">0</div>
+<div class="label">🔴 Critical</div>
+</div><div class="stat-card">
+<div class="number" style="color:var(--yellow)">0</div>
+<div class="label">🟡 Medium</div>
+</div><div class="stat-card">
+<div class="number" style="color:var(--blue)">0</div>
+<div class="label">🔵 Low</div>
+</div><div class="stat-card">
+<div class="number" style="color:var(--green)">PASS</div>
+<div class="label">Final Verdict</div>
+</div></div>
+<div class="section">
+<div class="section-title">🔍 Round 1 Findings</div>
+<div class="card">
+<div class="node-header">
+<h3>U13.0 — U13.0</h3>
+<span class="badge" style="background:rgba(34,197,94,0.12);color:var(--green)">PASS</span>
+<span style="color:var(--text-dim);font-size:.8rem">(0🔴 0🟡 0🔵)</span>
+</div>
+<p style="color:var(--text-dim);font-size:.9rem">No severity findings — all checks passed.</p>
+</div><div class="card">
+<div class="node-header">
+<h3>U13.0 — U13.0</h3>
+<span class="badge" style="background:rgba(34,197,94,0.12);color:var(--green)">PASS</span>
+<span style="color:var(--text-dim);font-size:.8rem">(0🔴 0🟡 0🔵)</span>
+</div>
+<p style="color:var(--text-dim);font-size:.9rem">No severity findings — all checks passed.</p>
+</div><div class="card">
+<div class="node-header">
+<h3>U3.0 — U3.0 Review</h3>
+<span class="badge" style="background:rgba(34,197,94,0.12);color:var(--green)">PASS</span>
+<span style="color:var(--text-dim);font-size:.8rem">(0🔴 0🟡 0🔵)</span>
+</div>
+<p style="color:var(--text-dim);font-size:.9rem">No severity findings — all checks passed.</p>
+</div><div class="card">
+<div class="node-header">
+<h3>U3.0 — U3.0 Review</h3>
+<span class="badge" style="background:rgba(234,179,8,0.12);color:var(--yellow)">ITERATE</span>
+<span style="color:var(--text-dim);font-size:.8rem">(0🔴 0🟡 0🔵)</span>
+</div>
+<p style="color:var(--text-dim);font-size:.9rem">No severity findings — all checks passed.</p>
+</div><div class="card">
+<div class="node-header">
+<h3>U6.0 — U6 Review</h3>
+<span class="badge" style="background:rgba(234,179,8,0.12);color:var(--yellow)">ITERATE</span>
+<span style="color:var(--text-dim);font-size:.8rem">(0🔴 0🟡 0🔵)</span>
+</div>
+<p style="color:var(--text-dim);font-size:.9rem">No severity findings — all checks passed.</p>
+</div><div class="card">
+<div class="node-header">
+<h3>U6.0 — U6 Review</h3>
+<span class="badge" style="background:rgba(34,197,94,0.12);color:var(--green)">PASS</span>
+<span style="color:var(--text-dim);font-size:.8rem">(0🔴 0🟡 0🔵)</span>
+</div>
+<p style="color:var(--text-dim);font-size:.9rem">No severity findings — all checks passed.</p>
+</div><div class="card">
+<div class="node-header">
+<h3>U9.0 — U9 Review</h3>
+<span class="badge" style="background:rgba(234,179,8,0.12);color:var(--yellow)">ITERATE</span>
+<span style="color:var(--text-dim);font-size:.8rem">(0🔴 0🟡 0🔵)</span>
+</div>
+<p style="color:var(--text-dim);font-size:.9rem">No severity findings — all checks passed.</p>
+</div><div class="card">
+<div class="node-header">
+<h3>U9.0 — U9 Review</h3>
+<span class="badge" style="background:rgba(234,179,8,0.12);color:var(--yellow)">ITERATE</span>
+<span style="color:var(--text-dim);font-size:.8rem">(0🔴 0🟡 0🔵)</span>
+</div>
+<p style="color:var(--text-dim);font-size:.9rem">No severity findings — all checks passed.</p>
+</div>
+</div>
+
+
+<div style="text-align:center;padding:2rem 0;color:var(--text-dim);font-size:.8rem;border-top:1px solid var(--border);margin-top:2rem">
+Generated by <strong>opc-report.mjs</strong> &middot; 0 findings across 8 reviewers &middot; 18 ticks
+</div>
+</div>
+</body>
+</html>

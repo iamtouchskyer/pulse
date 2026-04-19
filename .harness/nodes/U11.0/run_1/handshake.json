@@ -1,0 +1,9 @@
+{
+  "unit": "U11.0",
+  "run": 1,
+  "commit_sha": "ffe0f34f8cfb0816effc5a9fc4a0707a61613048",
+  "workflow_file": ".github/workflows/snapshot.yml",
+  "snapshot_entrypoint": "bun run snapshot -> bun packages/cli/src/index.ts snapshot",
+  "cron": "17 6 * * *",
+  "status": "ready"
+}

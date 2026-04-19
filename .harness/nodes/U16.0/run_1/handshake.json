@@ -1,0 +1,9 @@
+{
+  "verdict": "PASS",
+  "commit": "f2e51f3",
+  "prod_url": "https://pulse-dreamworks.vercel.app",
+  "http_status": 200,
+  "ttfb_seconds": 0.913,
+  "target_domain_note": "pulse.vercel.app is globally claimed; using project default pulse-dreamworks.vercel.app",
+  "artifacts": ["vercel.json", "packages/web/.gitignore"]
+}

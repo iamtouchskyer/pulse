@@ -1,0 +1,38 @@
+{
+  "verdict": "PASS",
+  "artifacts": [
+    "packages/cli/src/github.ts",
+    "packages/cli/src/github-schemas.ts",
+    "packages/cli/src/github.test.ts",
+    "packages/cli/src/snapshot.ts",
+    "packages/cli/src/snapshot.test.ts",
+    "packages/cli/src/writer.ts",
+    "packages/cli/src/writer.test.ts",
+    "packages/cli/src/token.ts",
+    "packages/cli/src/token.test.ts",
+    "packages/cli/src/index.ts",
+    "packages/cli/package.json",
+    "bun.lock"
+  ],
+  "findings_closed": [
+    "backend-R1",
+    "backend-R2",
+    "backend-R3",
+    "backend-R4",
+    "backend-R5",
+    "backend-W1",
+    "backend-W2",
+    "backend-W3",
+    "backend-W4",
+    "backend-W5",
+    "backend-W6",
+    "backend-W7",
+    "backend-W8",
+    "backend-W9",
+    "security-W1",
+    "security-W2",
+    "security-W3",
+    "security-W4"
+  ],
+  "commit": "5ef3a3a922d0a0e1e432c07113ecc7d8061f900a"
+}
