@@ -7,3 +7,7 @@ coverage/
 *.log
 .env
 .env.local
+packages/web/test-results/
+packages/web/playwright-report/
+packages/web/.playwright/
+data/.snapshots.e2e-backup/

@@ -114,7 +114,8 @@ header.site p.tagline {
 
 a {
   color: var(--accent);
-  text-decoration: none;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 a:hover {
   text-decoration: underline;

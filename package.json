@@ -17,6 +17,7 @@
     "notify": "bun packages/cli/src/index.ts notify",
     "dev": "bun --filter @pulse/web run dev",
     "build:web": "bun --filter @pulse/web run build",
+    "test:e2e": "bun --filter @pulse/web run test:e2e",
     "prepare": "husky"
   },
   "devDependencies": {
