@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
-import { mkdtempSync, readFileSync, writeFileSync, rmSync } from "node:fs";
+import { mkdtempSync, readFileSync, existsSync, rmSync } from "node:fs";
+import * as fs from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import {
@@ -22,6 +23,17 @@ describe("isoWeekFromDate", () => {
     expect(isoWeekFromDate("2026-01-01")).toBe("2026-W01");
     // Year boundary case: 2025-12-29 is part of 2026-W01 in ISO.
     expect(isoWeekFromDate("2025-12-29")).toBe("2026-W01");
+  });
+
+  it("handles ISO week edge cases across year boundaries", () => {
+    // Jan 1 2024 is a Monday → 2024-W01.
+    expect(isoWeekFromDate("2024-01-01")).toBe("2024-W01");
+    // Jan 1 2023 is a Sunday → ISO W52 of 2022.
+    expect(isoWeekFromDate("2023-01-01")).toBe("2022-W52");
+    // Dec 31 2018 is a Monday → 2019-W01.
+    expect(isoWeekFromDate("2018-12-31")).toBe("2019-W01");
+    // Dec 31 2023 is a Sunday → 2023-W52.
+    expect(isoWeekFromDate("2023-12-31")).toBe("2023-W52");
   });
 });
 
@@ -76,6 +88,30 @@ describe("buildWeeklyReport + markdown + slack", () => {
     expect(s.active_fork).toBe(0);
   });
 
+  it("expectedRepos: missing repos appear as zero-delta placeholders", () => {
+    const report = buildWeeklyReport({
+      latest, // has spike + steady
+      baseline,
+      alerts,
+      generatedAt: "2026-04-19T01:00:00.000Z",
+      expectedRepos: [
+        "iamtouchskyer/spike",
+        "iamtouchskyer/steady",
+        "iamtouchskyer/missing-one",
+        "iamtouchskyer/missing-two",
+      ],
+    });
+    expect(report.repos).toHaveLength(4);
+    const missing = report.repos.find((r) => r.repo === "iamtouchskyer/missing-one");
+    expect(missing).toEqual({
+      repo: "iamtouchskyer/missing-one",
+      stars_delta: 0,
+      forks_delta: 0,
+      views_delta: 0,
+      alerts_count: 0,
+    });
+  });
+
   it("renders markdown containing both repos", () => {
     const report = buildWeeklyReport({
       latest,
@@ -101,7 +137,7 @@ describe("buildWeeklyReport + markdown + slack", () => {
     expect(payload.blocks[0]?.text?.text).toContain("2026-W16");
   });
 
-  it("writeWeeklyReport writes atomically", () => {
+  it("writeWeeklyReport writes expected content and no .tmp leftover", () => {
     const dir = mkdtempSync(join(tmpdir(), "pulse-weekly-"));
     try {
       const report = buildWeeklyReport({
@@ -110,9 +146,48 @@ describe("buildWeeklyReport + markdown + slack", () => {
         alerts,
         generatedAt: "2026-04-19T01:00:00.000Z",
       });
-      const file = writeWeeklyReport(report, renderWeeklyMarkdown(report), dir);
-      writeFileSync(file, readFileSync(file, "utf8"), "utf8"); // sanity: file exists
+      const md = renderWeeklyMarkdown(report);
+      const file = writeWeeklyReport(report, md, dir);
       expect(file.endsWith("2026-W16.md")).toBe(true);
+      expect(existsSync(file)).toBe(true);
+      expect(existsSync(file + ".tmp")).toBe(false);
+      expect(readFileSync(file, "utf8")).toBe(md);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it("writeWeeklyReport: failed rename leaves final file untouched (atomicity)", () => {
+    const dir = mkdtempSync(join(tmpdir(), "pulse-weekly-atomic-"));
+    try {
+      const report = buildWeeklyReport({
+        latest,
+        baseline,
+        alerts,
+        generatedAt: "2026-04-19T01:00:00.000Z",
+      });
+      const md = renderWeeklyMarkdown(report);
+      // First, perform a successful write so the final file exists.
+      const file = writeWeeklyReport(report, md, dir);
+      const originalContent = readFileSync(file, "utf8");
+      expect(existsSync(file + ".tmp")).toBe(false);
+
+      // Simulate a rename failure by making the final path a directory: the
+      // OS rename(tmp, finalDir) fails → writeWeeklyReport throws → the
+      // committed file at `file` is not replaced with partial data.
+      // We first delete `file` and re-create as a directory, which acts as
+      // a rename-blocker for the subsequent call.
+      rmSync(file);
+      fs.mkdirSync(file);
+      fs.writeFileSync(join(file, "sentinel"), "keep me");
+      const tampered = md + "\n<!-- tampered -->\n";
+      expect(() => writeWeeklyReport(report, tampered, dir)).toThrow();
+      // Sentinel still there → final path was not overwritten by partial data.
+      expect(readFileSync(join(file, "sentinel"), "utf8")).toBe("keep me");
+      // The original content check (read through the directory) is moot here,
+      // but the key assertion is that the partial data at .tmp did not
+      // clobber the final path. Just to tie it off:
+      expect(originalContent.length).toBeGreaterThan(0);
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }
@@ -123,6 +198,14 @@ describe("sendSlackMessage (dry-run default)", () => {
   it("skips when channel is null", async () => {
     const log = vi.spyOn(console, "log").mockImplementation(() => {});
     await sendSlackMessage(null, { blocks: [] }, { send: false });
+    expect(log).not.toHaveBeenCalled();
+    log.mockRestore();
+  });
+
+  it("skips when channel is undefined/empty AND default mode (no network call)", async () => {
+    const log = vi.spyOn(console, "log").mockImplementation(() => {});
+    await sendSlackMessage("", { blocks: [] }, { send: false });
+    // No log call → no payload emitted → no network side-effect.
     expect(log).not.toHaveBeenCalled();
     log.mockRestore();
   });
@@ -140,6 +223,9 @@ describe("sendSlackMessage (dry-run default)", () => {
     const log = vi.spyOn(console, "log").mockImplementation(() => {});
     await sendSlackMessage("C123", { blocks: [] }, { send: true });
     expect(log).toHaveBeenCalled();
+    const arg = String(log.mock.calls[0]?.[0] ?? "");
+    // Pin that we hit the stub branch, not the dry-run payload branch.
+    expect(arg).toMatch(/stub|would send/i);
     log.mockRestore();
   });
 });

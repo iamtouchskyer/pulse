@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { mkdtempSync, writeFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -71,6 +71,61 @@ describe("rules-config", () => {
       const p = join(dir, "w.yaml");
       writeFileSync(p, "", "utf8");
       expect(loadWatchlistOrEmpty(p)).toEqual([]);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it("loadWatchlistOrEmpty degrades to [] on malformed content (not an array)", () => {
+    const dir = mkdtempSync(join(tmpdir(), "pulse-wl-"));
+    try {
+      const p = join(dir, "w.yaml");
+      writeFileSync(p, "alice: true\nbob: false\n", "utf8");
+      // Malformed (object, not array) → should warn and return [], NOT throw.
+      const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+      expect(loadWatchlistOrEmpty(p)).toEqual([]);
+      expect(warn).toHaveBeenCalled();
+      warn.mockRestore();
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it("loadRulesFile throws ENOENT when file missing", () => {
+    const p = join(tmpdir(), "definitely-not-here-" + Date.now() + ".yaml");
+    expect(() => loadRulesFile(p)).toThrow(/ENOENT|no such file/);
+  });
+
+  it("loadRulesFile throws when root is not an object", () => {
+    const dir = mkdtempSync(join(tmpdir(), "pulse-rules-"));
+    try {
+      const p = join(dir, "r.yaml");
+      writeFileSync(p, "- just\n- an\n- array\n", "utf8");
+      expect(() => loadRulesFile(p)).toThrow(ZodError);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it("loadRulesFile: extra unknown top-level fields — passthrough (non-strict schema, documented)", () => {
+    const dir = mkdtempSync(join(tmpdir(), "pulse-rules-"));
+    try {
+      const p = join(dir, "r.yaml");
+      writeFileSync(
+        p,
+        [
+          "known_list: []",
+          "notify_channel: null",
+          "rules: []",
+          "notify_channels: typo_that_should_probably_fail_strict",
+        ].join("\n"),
+        "utf8"
+      );
+      // Current schema is NOT `.strict()`, so unknown top-level fields pass.
+      // This test documents that behavior so any future strict-mode change is
+      // an intentional break, not a silent regression.
+      const parsed = loadRulesFile(p);
+      expect(parsed.rules).toEqual([]);
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }

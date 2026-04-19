@@ -41,13 +41,15 @@ export async function runActiveFork(snap: Snapshot, deps: ActiveForkDeps): Promi
 
   let forks: z.infer<typeof ForksResponseSchema>;
   try {
-    const res = await client.request("GET /repos/{owner}/{repo}/forks", {
+    // Paginate across all pages; we filter to last 7d below. octokit.paginate
+    // will stream all pages and concatenate, so we're not capped at per_page.
+    const all = await client.paginate("GET /repos/{owner}/{repo}/forks", {
       owner,
       repo,
       sort: "newest",
-      per_page: 10,
+      per_page: 100,
     });
-    forks = ForksResponseSchema.parse(res.data);
+    forks = ForksResponseSchema.parse(all);
   } catch (err) {
     const classified = classifyError(err);
     // eslint-disable-next-line no-console

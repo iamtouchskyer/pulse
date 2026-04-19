@@ -45,6 +45,12 @@ export function loadWatchlistOrEmpty(path: string): Watchlist {
     return WatchlistSchema.parse(parsed);
   } catch (err) {
     if ((err as NodeJS.ErrnoException).code === "ENOENT") return [];
-    throw err;
+    // Malformed YAML or schema violation: degrade to empty list with a warn
+    // rather than bricking the whole pipeline. The "or empty" name promises
+    // tolerance.
+    const msg = err instanceof Error ? err.message : String(err);
+    // eslint-disable-next-line no-console
+    console.warn(`pulse: watchlist load failed (${msg}); using empty list`);
+    return [];
   }
 }

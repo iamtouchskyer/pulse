@@ -82,7 +82,12 @@ function subtractDays(dateStr: string, nDays: number): string {
 export function meanStd(values: number[]): { mean: number; std: number } {
   if (values.length === 0) return { mean: 0, std: 0 };
   const mean = values.reduce((a, b) => a + b, 0) / values.length;
-  const variance = values.reduce((acc, v) => acc + (v - mean) ** 2, 0) / values.length;
+  // Sample std (Bessel's correction): divide by N-1. With only 3 prior weekly
+  // samples, population std materially under-estimates σ and makes a 3σ
+  // threshold too easy to trip. When N<2, σ is undefined — return 0 and the
+  // caller's `mean <= 0` / equality guards handle degenerate cases.
+  if (values.length < 2) return { mean, std: 0 };
+  const variance = values.reduce((acc, v) => acc + (v - mean) ** 2, 0) / (values.length - 1);
   return { mean, std: Math.sqrt(variance) };
 }
 
@@ -94,6 +99,8 @@ export function runStarVelocitySpike(
   const weeks = computeWeeklyDeltas(snapshotsDir, snap.repo, snap.date);
   if (weeks === null) return [];
   const prevValues = weeks.previous.map((w) => w.delta);
+  // Sample std needs at least 2 observations to be meaningful.
+  if (prevValues.length < 2) return [];
   const { mean, std } = meanStd(prevValues);
   if (mean <= 0) return [];
   const threshold = mean + params.sigma * std;

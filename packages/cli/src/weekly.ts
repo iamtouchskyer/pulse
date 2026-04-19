@@ -1,4 +1,4 @@
-import { mkdirSync, renameSync, writeFileSync } from "node:fs";
+import * as fs from "node:fs";
 import { join } from "node:path";
 import {
   WeeklyReportSchema,
@@ -34,6 +34,13 @@ export interface BuildWeeklyInput {
   baseline: Map<string, Snapshot>;
   alerts: Alert[];
   generatedAt: string;
+  /**
+   * Optional: full list of repos that should appear in the report even if
+   * missing from `latest` (e.g. a failed snapshot day). Missing repos emit a
+   * placeholder row with all deltas = 0. Defaults to the distinct repos in
+   * `latest`.
+   */
+  expectedRepos?: readonly string[];
 }
 
 export function buildWeeklyReport(input: BuildWeeklyInput): WeeklyReport {
@@ -43,9 +50,25 @@ export function buildWeeklyReport(input: BuildWeeklyInput): WeeklyReport {
   for (const a of input.alerts) {
     alertsByRepo.set(a.repo, (alertsByRepo.get(a.repo) ?? 0) + 1);
   }
+  const expected =
+    input.expectedRepos && input.expectedRepos.length > 0
+      ? Array.from(new Set(input.expectedRepos))
+      : Array.from(input.latest.keys());
   const repos: WeeklyRepoEntry[] = [];
-  for (const [repo, snap] of input.latest) {
+  for (const repo of expected) {
+    const snap = input.latest.get(repo);
     const base = input.baseline.get(repo);
+    if (snap === undefined) {
+      // Missing from latest: emit placeholder so all expected repos appear.
+      repos.push({
+        repo,
+        stars_delta: 0,
+        forks_delta: 0,
+        views_delta: 0,
+        alerts_count: alertsByRepo.get(repo) ?? 0,
+      });
+      continue;
+    }
     const stars_delta = base ? snap.stars - base.stars : 0;
     const forks_delta = base ? snap.forks - base.forks : 0;
     const views_delta = base ? snap.traffic.views_14d - base.traffic.views_14d : 0;
@@ -151,10 +174,10 @@ export function buildSlackPayload(report: WeeklyReport): SlackPayload {
 
 /** Atomic write of the weekly markdown report to `reports/YYYY-WNN.md`. */
 export function writeWeeklyReport(report: WeeklyReport, md: string, reportsDir: string): string {
-  mkdirSync(reportsDir, { recursive: true });
+  fs.mkdirSync(reportsDir, { recursive: true });
   const file = join(reportsDir, `${report.iso_week}.md`);
   const tmp = `${file}.tmp`;
-  writeFileSync(tmp, md, "utf8");
-  renameSync(tmp, file);
+  fs.writeFileSync(tmp, md, "utf8");
+  fs.renameSync(tmp, file);
   return file;
 }

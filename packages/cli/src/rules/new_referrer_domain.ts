@@ -18,14 +18,29 @@ export interface NewReferrerParams {
   knownList: readonly string[];
 }
 
+/**
+ * Returns true if `host` exactly matches any known domain OR is a subdomain
+ * thereof. E.g. `mobile.twitter.com` is considered known when `twitter.com`
+ * is in `knownList`. Case-insensitive; callers are expected to lowercase
+ * both sides (we defensively lowercase again).
+ */
+export function isKnownDomain(host: string, knownList: readonly string[]): boolean {
+  const h = host.toLowerCase();
+  for (const k of knownList) {
+    const kk = k.toLowerCase();
+    if (h === kk) return true;
+    if (h.endsWith("." + kk)) return true;
+  }
+  return false;
+}
+
 export function runNewReferrerDomain(snap: Snapshot, params: NewReferrerParams): Alert[] {
-  const known = new Set(params.knownList.map((d) => d.toLowerCase()));
   const out: Alert[] = [];
   for (const r of snap.top_referrers) {
     if (r.uniques < params.uniquesThreshold) continue;
     const domain = extractDomain(r.referrer);
     if (domain.length === 0) continue;
-    if (known.has(domain)) continue;
+    if (isKnownDomain(domain, params.knownList)) continue;
     out.push({
       schema_version: 1,
       rule: "new_referrer_domain",
