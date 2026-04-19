@@ -11,3 +11,11 @@ packages/web/test-results/
 packages/web/playwright-report/
 packages/web/.playwright/
 data/.snapshots.e2e-backup/
+
+# OPC harness runtime artifacts (keep only design docs: plan.md, acceptance-criteria.md)
+.harness/nodes/
+.harness/loop-state.json
+.harness/progress.md
+.harness/backlog.md
+.harness/final-report.html
+.harness/next-loop-seed.md
