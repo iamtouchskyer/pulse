@@ -1,0 +1,7 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "bun run --filter @pulse/web build",
+  "installCommand": "bun install --frozen-lockfile",
+  "outputDirectory": "packages/web/dist",
+  "framework": "astro"
+}
