@@ -1,10 +1,10 @@
 {
-  "tick": 0,
-  "unit": null,
-  "description": "Loop initialized",
+  "tick": 1,
+  "unit": "U1.0",
+  "description": "monorepo scaffold + PULSE_GH_TOKEN secret set",
   "status": "in_progress",
-  "artifacts": [],
-  "next_unit": "U1.0",
+  "artifacts": ["package.json", "tsconfig.json", ".eslintrc.cjs", ".husky/pre-commit"],
+  "next_unit": "U2.0",
   "blockers": [],
   "review_of_previous": "",
   "plan_file": ".harness/plan.md",
@@ -31,9 +31,15 @@
   ],
   "_written_by": "opc-harness",
   "_plan_hash": "33a5de6500e10ebd",
-  "_last_modified": "2026-04-19T08:18:55.711Z",
-  "_git_head": null,
-  "_tick_history": [],
+  "_last_modified": "2026-04-19T11:04:20.800Z",
+  "_git_head": "d868173b857f2696ff38d578688e48a11992d76f",
+  "_tick_history": [
+    {
+      "unit": "U1.0",
+      "tick": 1,
+      "status": "completed"
+    }
+  ],
   "_max_total_ticks": 54,
   "_started_at": "2026-04-19T08:18:17.051Z",
   "_max_duration_hours": 24,
