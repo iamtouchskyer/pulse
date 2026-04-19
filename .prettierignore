@@ -1,0 +1,9 @@
+node_modules/
+bun.lock
+.vercel/
+dist/
+.astro/
+coverage/
+data/snapshots/
+.harness/
+.opc/
