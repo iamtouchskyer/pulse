@@ -1,3 +1,4 @@
 - **Tick 1** [U1.0] (chore): monorepo scaffold + PULSE_GH_TOKEN secret set — 2026-04-19T11:03:45.451Z
 - **Tick 2** [U2.0] (implement): zod schemas for Snapshot/Rule/Alert/WeeklyReport with happy/missing/wrong-type tests — 2026-04-19T11:08:35.983Z
 - **Tick 3** [U3.0] (review): U3 review: backend ITERATE (2🔴 ghost-user, 8🟡), architect PASS (4🟡) — 2026-04-19T11:13:34.697Z
+- **Tick 4** [U4.0] (fix): fixed U3 review: backend-1/2 ghost users nullable, backend-w1..w8 bounded arrays/sigma positive/iso_week regex/Alert.rule enum, architect-w1..w3 schema_version — 2026-04-19T11:18:59.158Z

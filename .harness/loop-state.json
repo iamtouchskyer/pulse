@@ -1,13 +1,15 @@
 {
-  "tick": 3,
-  "unit": "U3.0",
-  "description": "U3 review: backend ITERATE (2🔴 ghost-user, 8🟡), architect PASS (4🟡)",
+  "tick": 4,
+  "unit": "U4.0",
+  "description": "fixed U3 review: backend-1/2 ghost users nullable, backend-w1..w8 bounded arrays/sigma positive/iso_week regex/Alert.rule enum, architect-w1..w3 schema_version",
   "status": "completed",
   "artifacts": [
-    ".harness/nodes/U3.0/run_1/eval-backend.md",
-    ".harness/nodes/U3.0/run_1/eval-architect.md"
+    "packages/schema/src/snapshot.ts",
+    "packages/schema/src/rule.ts",
+    "packages/schema/src/alert.ts",
+    "packages/schema/src/weekly.ts"
   ],
-  "next_unit": "U4.0",
+  "next_unit": "U5.0",
   "blockers": [],
   "review_of_previous": "",
   "plan_file": ".harness/plan.md",
@@ -34,8 +36,8 @@
   ],
   "_written_by": "opc-harness",
   "_plan_hash": "33a5de6500e10ebd",
-  "_last_modified": "2026-04-19T11:13:34.685Z",
-  "_git_head": "ad47f3efa4398de95428a02e80a41e865630804a",
+  "_last_modified": "2026-04-19T11:18:59.146Z",
+  "_git_head": "c2b47356b39cd7756d6611d9de59f1c26ea9e98a",
   "_tick_history": [
     {
       "unit": "U1.0",
@@ -52,6 +54,11 @@
       "tick": 3,
       "status": "completed",
       "verdict": "FAIL"
+    },
+    {
+      "unit": "U4.0",
+      "tick": 4,
+      "status": "completed"
     }
   ],
   "_max_total_ticks": 54,
@@ -65,7 +72,7 @@
     "typecheck_script": false
   },
   "_last_review_evals": {
-    ".harness/nodes/U3.0/run_1/eval-backend.md": "a82ea33ba7426e2e",
-    ".harness/nodes/U3.0/run_1/eval-architect.md": "24a3b0966e7f58d8"
+    ".harness/nodes/U3.0/run_1/eval-backend.md": "d8b26fdb1bf8482c",
+    ".harness/nodes/U3.0/run_1/eval-architect.md": "0b6a3fe0403bab31"
   }
 }

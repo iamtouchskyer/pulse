@@ -2,5 +2,18 @@
   "name": "@pulse/cli",
   "version": "0.0.0",
   "type": "module",
-  "main": "./src/index.ts"
+  "main": "./src/index.ts",
+  "bin": {
+    "pulse": "./src/index.ts"
+  },
+  "dependencies": {
+    "@pulse/schema": "workspace:*",
+    "@octokit/rest": "^21.0.0",
+    "@octokit/plugin-retry": "^7.1.0",
+    "@octokit/plugin-throttling": "^9.3.0",
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0"
+  }
 }

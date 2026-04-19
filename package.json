@@ -10,6 +10,11 @@
     "lint": "eslint . --ext .ts,.tsx,.astro",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "snapshot": "bun packages/cli/src/index.ts snapshot",
+    "diff": "bun packages/cli/src/index.ts diff",
+    "rules": "bun packages/cli/src/index.ts rules",
+    "weekly": "bun packages/cli/src/index.ts weekly",
+    "notify": "bun packages/cli/src/index.ts notify",
     "prepare": "husky"
   },
   "devDependencies": {
