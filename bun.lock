@@ -29,6 +29,7 @@
         "@octokit/rest": "^21.0.0",
         "@pulse/schema": "workspace:*",
         "commander": "^12.1.0",
+        "yaml": "^2.5.0",
         "zod": "^3.23.0",
       },
       "devDependencies": {

@@ -1,0 +1,19 @@
+# Pulse v1 default rules. Edit freely — schema validated on load.
+known_list:
+  - github.com
+  - google.com
+  - t.co
+  - bing.com
+  - duckduckgo.com
+  - news.ycombinator.com
+  - reddit.com
+notify_channel: null
+rules:
+  - type: new_referrer_domain
+    uniques_threshold: 20
+  - type: unanswered_issue
+    age_hours: 48
+  - type: star_velocity_spike
+    sigma: 3
+  - type: active_fork
+  - type: watchlist_signal

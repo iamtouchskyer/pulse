@@ -26,10 +26,11 @@ describe("pulse CLI dry-run", () => {
   });
 
   it("stub commands exit 0", () => {
-    for (const stub of ["diff", "rules", "weekly", "notify"]) {
-      const r = spawnSync("bun", [CLI, stub], { encoding: "utf8" });
-      expect(r.status).toBe(0);
-      expect(r.stdout).toMatch(/not implemented/);
-    }
+    // Smoke test: diff with no data → "no baseline" and exit 0.
+    const r = spawnSync("bun", [CLI, "diff", "--since", "7d", "--snapshots", "/nonexistent"], {
+      encoding: "utf8",
+    });
+    expect(r.status).toBe(0);
+    expect(r.stdout).toMatch(/no baseline/);
   });
 });

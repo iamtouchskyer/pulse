@@ -12,6 +12,7 @@
     "@octokit/plugin-retry": "^7.1.0",
     "@octokit/plugin-throttling": "^9.3.0",
     "commander": "^12.1.0",
+    "yaml": "^2.5.0",
     "zod": "^3.23.0"
   },
   "devDependencies": {
