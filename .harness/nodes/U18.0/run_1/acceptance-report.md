@@ -13,11 +13,13 @@
 | OUT-2 | diff command | PASS |
 | OUT-3 | rules check | PASS |
 | OUT-4 | weekly command | PASS |
-| OUT-5 | GitHub Actions | FAIL (workflow not on origin) |
+| OUT-5 | GitHub Actions | PASS (verified post-push) |
 | OUT-6 | dashboard e2e | PASS |
 | OUT-7 | production URL | PASS |
 
-**Overall:** PARTIAL — 6/7 OUTs pass. OUT-5 blocked by local-only commits never pushed to `origin/main`.
+**Overall:** PASS — 7/7 OUTs pass.
+
+**OUT-5 follow-up (post-report):** `git push origin main` → workflow became dispatchable → `gh workflow run snapshot.yml` → run `24629453306` completed successfully → latest main commit `26a3dd9` authored by `github-actions[bot]` with message `chore(snapshot): 2026-04-19 automated capture`, containing all 4 snapshot JSONs under `data/snapshots/2026-04-19/`. Verified via `gh api /repos/iamtouchskyer/pulse/commits/main --jq .author.login` → `github-actions[bot]`. Full run <5 min, well under target.
 
 ---
 

@@ -1,0 +1,24 @@
+{
+  "unit": "U18.0",
+  "run": 1,
+  "commit": "0b6cc448b3615a61ee91c4fd14161ef0bfb730b0",
+  "outcomes": {
+    "OUT-1": "PASS",
+    "OUT-2": "PASS",
+    "OUT-3": "PASS",
+    "OUT-4": "PASS",
+    "OUT-5": "PASS",
+    "OUT-6": "PASS",
+    "OUT-7": "PASS"
+  },
+  "overall": "PASS",
+  "prod_url": "https://pulse-dreamworks.vercel.app",
+  "workflow_run": "https://github.com/iamtouchskyer/pulse/actions/runs/24629453306",
+  "bot_commit": "26a3dd9",
+  "bot_author": "github-actions[bot]",
+  "notes": "Post-report: git push origin main + gh workflow run snapshot.yml → run 24629453306 succeeded, github-actions[bot] committed data/snapshots/2026-04-19/ as 26a3dd9. All 7 OUTs verified end-to-end.",
+  "followups": [
+    "Resolve test.skip in packages/web/tests/e2e/cards.spec.ts:32 (v1.1)",
+    "Clean active_fork stderr noise when ~/.claude/.env blocked (v1.1)"
+  ]
+}
