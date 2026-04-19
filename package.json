@@ -15,6 +15,8 @@
     "rules": "bun packages/cli/src/index.ts rules",
     "weekly": "bun packages/cli/src/index.ts weekly",
     "notify": "bun packages/cli/src/index.ts notify",
+    "dev": "bun --filter @pulse/web run dev",
+    "build:web": "bun --filter @pulse/web run build",
     "prepare": "husky"
   },
   "devDependencies": {
@@ -26,6 +28,7 @@
     "husky": "^9.1.0",
     "lint-staged": "^15.2.0",
     "prettier": "^3.3.0",
+    "prettier-plugin-astro": "^0.14.1",
     "typescript": "^5.6.0",
     "vitest": "^2.1.0"
   },

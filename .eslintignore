@@ -1,0 +1,7 @@
+node_modules/
+dist/
+coverage/
+.harness/
+.opc/
+# TODO(U14): add astro-eslint-parser and re-enable .astro linting
+**/*.astro

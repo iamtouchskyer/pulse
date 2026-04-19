@@ -1,0 +1,60 @@
+---
+import "../styles/global.css";
+import RepoCard from "../components/RepoCard.astro";
+import EmptyState from "../components/EmptyState.astro";
+import { loadSnapshots } from "../lib/loadSnapshots";
+
+const { cards, empty, latestDate } = loadSnapshots();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Pulse — daily OSS radar for 4 repos: opc, memex, logex, blog. Stars, forks, issues at a glance."
+    />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <title>Pulse — OSS Radar</title>
+  </head>
+  <body>
+    <main>
+      <header class="site">
+        <h1>Pulse</h1>
+        <p class="tagline">
+          Daily OSS radar · {
+            latestDate ? (
+              <span>
+                snapshot <time datetime={latestDate}>{latestDate}</time>
+              </span>
+            ) : (
+              <span>awaiting first snapshot</span>
+            )
+          }
+        </p>
+      </header>
+
+      {
+        empty ? (
+          <EmptyState />
+        ) : (
+          <section class="grid" aria-label="Repositories">
+            {cards.map((card) => (
+              <RepoCard card={card} />
+            ))}
+          </section>
+        )
+      }
+
+      <footer class="footer">
+        <p>
+          Built with <a href="https://astro.build">Astro</a>. Snapshots captured daily at 06:17 UTC
+          by GitHub Actions.
+        </p>
+      </footer>
+    </main>
+  </body>
+</html>

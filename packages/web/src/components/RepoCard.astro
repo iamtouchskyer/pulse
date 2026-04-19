@@ -1,0 +1,100 @@
+---
+import type { CardData } from "../lib/loadSnapshots";
+
+interface Props {
+  card: CardData;
+}
+const { card } = Astro.props;
+
+function fmt(n: number | null): string {
+  if (n === null) return "—";
+  if (n >= 1000) return `${(n / 1000).toFixed(1)}k`;
+  return String(n);
+}
+---
+
+<article class="card" data-testid="repo-card" aria-label={`Repository ${card.repo}`}>
+  <header class="card-header">
+    <h2>{card.repo}</h2>
+    {!card.hasData && <span class="badge">no data</span>}
+  </header>
+  <dl class="stats">
+    <div class="stat">
+      <dt>stars</dt>
+      <dd>{fmt(card.stars)}</dd>
+    </div>
+    <div class="stat">
+      <dt>forks</dt>
+      <dd>{fmt(card.forks)}</dd>
+    </div>
+    <div class="stat">
+      <dt>issues</dt>
+      <dd>{fmt(card.open_issues)}</dd>
+    </div>
+  </dl>
+</article>
+
+<style>
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition:
+      transform 0.15s ease,
+      border-color 0.15s ease;
+  }
+  .card:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+  .card-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+  h2 {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .badge {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    background: var(--bg);
+    padding: 0.125rem 0.5rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+  }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin: 0;
+  }
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+  .stat dt {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+  }
+  .stat dd {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+</style>

@@ -1,0 +1,58 @@
+---
+// No props; the empty state is self-contained.
+---
+
+<section class="empty" data-testid="empty-state" role="status" aria-live="polite">
+  <svg
+    class="icon"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M12 2v4"></path>
+    <path d="M12 18v4"></path>
+    <path d="M4.93 4.93l2.83 2.83"></path>
+    <path d="M16.24 16.24l2.83 2.83"></path>
+    <path d="M2 12h4"></path>
+    <path d="M18 12h4"></path>
+    <path d="M4.93 19.07l2.83-2.83"></path>
+    <path d="M16.24 7.76l2.83-2.83"></path>
+  </svg>
+  <h2>No snapshots yet</h2>
+  <p>The daily GitHub Actions workflow runs at 06:17 UTC — check back tomorrow.</p>
+</section>
+
+<style>
+  .empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 1.5rem;
+    border: 1px dashed var(--border);
+    border-radius: 16px;
+    background: var(--surface);
+    gap: 0.75rem;
+  }
+  .icon {
+    width: 48px;
+    height: 48px;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+  }
+  .empty h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+  .empty p {
+    margin: 0;
+    max-width: 40ch;
+    color: var(--text-muted);
+  }
+</style>
