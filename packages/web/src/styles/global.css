@@ -12,13 +12,30 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #0b0b0f;
-    --surface: #141418;
-    --border: #26262c;
+    /* Lift surface + border so cards visibly separate from the page on
+       non-OLED displays; add a subtle inset top-edge highlight via shadow. */
+    --surface: #1a1a21;
+    --border: #2e2e36;
     --text: #fafafa;
     --text-muted: #a1a1aa;
     --accent: #8a8aff;
     --focus: #8a8aff;
-    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 2px 12px rgba(0, 0, 0, 0.3);
+    --shadow:
+      0 1px 2px rgba(0, 0, 0, 0.4), 0 2px 12px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  }
+}
+
+/* Global reduced-motion override — kills non-essential animation/transition
+   for users who request it (WCAG 2.3.3, vestibular safety). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 

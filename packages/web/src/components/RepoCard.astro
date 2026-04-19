@@ -11,23 +11,25 @@ function fmt(n: number | null): string {
   if (n >= 1000) return `${(n / 1000).toFixed(1)}k`;
   return String(n);
 }
+
+const headingId = `repo-name-${card.repo}`;
 ---
 
-<article class="card" data-testid="repo-card" aria-label={`Repository ${card.repo}`}>
+<article class="card" data-testid="repo-card" aria-labelledby={headingId}>
   <header class="card-header">
-    <h2>{card.repo}</h2>
+    <h2 id={headingId}>{card.repo}</h2>
     {!card.hasData && <span class="badge">no data</span>}
   </header>
   <dl class="stats">
-    <div class="stat">
+    <div class="stat stat-primary">
       <dt>stars</dt>
       <dd>{fmt(card.stars)}</dd>
     </div>
-    <div class="stat">
+    <div class="stat stat-secondary">
       <dt>forks</dt>
       <dd>{fmt(card.forks)}</dd>
     </div>
-    <div class="stat">
+    <div class="stat stat-secondary">
       <dt>issues</dt>
       <dd>{fmt(card.open_issues)}</dd>
     </div>
@@ -44,13 +46,22 @@ function fmt(n: number | null): string {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    transition:
-      transform 0.15s ease,
-      border-color 0.15s ease;
+  }
+  /* Honor prefers-reduced-motion: only attach hover transition/transform when
+     the user has not requested reduced motion. Reduced-motion users get the
+     border-color hover (instant, non-vestibular) but no lift. */
+  @media (prefers-reduced-motion: no-preference) {
+    .card {
+      transition:
+        transform 0.15s ease,
+        border-color 0.15s ease;
+    }
+    .card:hover {
+      transform: translateY(-1px);
+    }
   }
   .card:hover {
     border-color: var(--accent);
-    transform: translateY(-1px);
   }
   .card-header {
     display: flex;
@@ -74,9 +85,10 @@ function fmt(n: number | null): string {
   }
   .stats {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 2fr 1fr 1fr;
     gap: 0.75rem;
     margin: 0;
+    align-items: end;
   }
   .stat {
     display: flex;
@@ -92,9 +104,19 @@ function fmt(n: number | null): string {
   }
   .stat dd {
     margin: 0;
-    font-size: 1.5rem;
-    font-weight: 700;
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+  /* Visual hierarchy: stars is the primary metric, ~2× the size of forks/issues. */
+  .stat-primary dd {
+    font-size: 2rem;
+    color: var(--text);
+    line-height: 1.1;
+  }
+  .stat-secondary dd {
+    font-size: 1.125rem;
+    color: var(--text-muted);
+    line-height: 1.2;
   }
 </style>

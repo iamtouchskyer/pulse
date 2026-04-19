@@ -2,10 +2,10 @@
 // No props; the empty state is self-contained.
 ---
 
-<section class="empty" data-testid="empty-state" role="status" aria-live="polite">
+<section class="empty" data-testid="empty-state" aria-labelledby="empty-title">
   <svg
     class="icon"
-    viewBox="0 0 24 24"
+    viewBox="0 0 48 48"
     fill="none"
     stroke="currentColor"
     stroke-width="1.5"
@@ -13,17 +13,22 @@
     stroke-linejoin="round"
     aria-hidden="true"
   >
-    <path d="M12 2v4"></path>
-    <path d="M12 18v4"></path>
-    <path d="M4.93 4.93l2.83 2.83"></path>
-    <path d="M16.24 16.24l2.83 2.83"></path>
-    <path d="M2 12h4"></path>
-    <path d="M18 12h4"></path>
-    <path d="M4.93 19.07l2.83-2.83"></path>
-    <path d="M16.24 7.76l2.83-2.83"></path>
+    <!--
+      Static "horizon + bars" silhouette: a baseline with a few flat bars and a single
+      indicator dot. No rotational symmetry, no animation — reads as a calm gauge,
+      not a spinner.
+    -->
+    <line x1="6" y1="36" x2="42" y2="36"></line>
+    <rect x="10" y="28" width="5" height="8"></rect>
+    <rect x="19" y="22" width="5" height="14"></rect>
+    <rect x="28" y="30" width="5" height="6"></rect>
+    <circle cx="38.5" cy="32" r="1.75" fill="currentColor" stroke="none"></circle>
   </svg>
-  <h2>No snapshots yet</h2>
-  <p>The daily GitHub Actions workflow runs at 06:17 UTC — check back tomorrow.</p>
+  <h2 id="empty-title">No snapshots captured yet</h2>
+  <p>
+    Pulse takes a daily reading of four repos (opc, memex, logex, blog) and writes it here. The
+    first snapshot runs tomorrow at 06:17 UTC.
+  </p>
 </section>
 
 <style>
@@ -40,8 +45,8 @@
     gap: 0.75rem;
   }
   .icon {
-    width: 48px;
-    height: 48px;
+    width: 56px;
+    height: 56px;
     color: var(--text-muted);
     margin-bottom: 0.5rem;
   }
@@ -52,7 +57,7 @@
   }
   .empty p {
     margin: 0;
-    max-width: 40ch;
+    max-width: 48ch;
     color: var(--text-muted);
   }
 </style>
