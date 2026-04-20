@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "repo": "iamtouchskyer/logex",
+  "date": "2026-04-20",
+  "captured_at": "2026-04-20T08:30:18.547Z",
+  "stars": 20,
+  "forks": 13,
+  "watchers": 5,
+  "open_issues": 0,
+  "open_prs": 0,
+  "traffic": {
+    "views_14d": 27,
+    "unique_visitors_14d": 11,
+    "clones_14d": 970
+  },
+  "top_referrers": [
+    {
+      "referrer": "github.com",
+      "count": 8,
+      "uniques": 5
+    },
+    {
+      "referrer": "statics.teams.cdn.office.net",
+      "count": 1,
+      "uniques": 1
+    }
+  ],
+  "top_paths": [
+    {
+      "path": "/iamtouchskyer/logex",
+      "count": 18,
+      "uniques": 10
+    },
+    {
+      "path": "/iamtouchskyer/logex/commits/main",
+      "count": 5,
+      "uniques": 1
+    },
+    {
+      "path": "/iamtouchskyer/logex/fork",
+      "count": 3,
+      "uniques": 2
+    },
+    {
+      "path": "/iamtouchskyer/logex/tree/main/src",
+      "count": 1,
+      "uniques": 1
+    }
+  ],
+  "recent_issues": [],
+  "recent_stargazers": [
+    "iamtouchskyer",
+    "june9593",
+    "xuri",
+    "imink",
+    "sunranlb",
+    "NSKevin",
+    "laijiandong",
+    "huangjy",
+    "yuhaospark",
+    "imth",
+    "Elity",
+    "m1911star",
+    "yuanjunz",
+    "douya-labs",
+    "haipeng-eric",
+    "AdenChen512",
+    "GuodLuckWang",
+    "Zerrun",
+    "NoWall57",
+    "luoyun0921"
+  ]
+}

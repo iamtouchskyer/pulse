@@ -1,0 +1,168 @@
+{
+  "schema_version": 1,
+  "repo": "iamtouchskyer/opc",
+  "date": "2026-04-20",
+  "captured_at": "2026-04-20T08:30:17.217Z",
+  "stars": 107,
+  "forks": 28,
+  "watchers": 11,
+  "open_issues": 2,
+  "open_prs": 6,
+  "traffic": {
+    "views_14d": 630,
+    "unique_visitors_14d": 189,
+    "clones_14d": 879
+  },
+  "top_referrers": [
+    {
+      "referrer": "github.com",
+      "count": 176,
+      "uniques": 45
+    },
+    {
+      "referrer": "Bing",
+      "count": 35,
+      "uniques": 4
+    },
+    {
+      "referrer": "touchskyer.me",
+      "count": 22,
+      "uniques": 8
+    },
+    {
+      "referrer": "statics.teams.cdn.office.net",
+      "count": 9,
+      "uniques": 4
+    },
+    {
+      "referrer": "bytedance.larkoffice.com",
+      "count": 9,
+      "uniques": 1
+    },
+    {
+      "referrer": "link.zhihu.com",
+      "count": 8,
+      "uniques": 5
+    },
+    {
+      "referrer": "web.telegram.org",
+      "count": 8,
+      "uniques": 1
+    },
+    {
+      "referrer": "linkedin.com",
+      "count": 3,
+      "uniques": 3
+    },
+    {
+      "referrer": "Google",
+      "count": 2,
+      "uniques": 1
+    },
+    {
+      "referrer": "web.tabbit-ai.com",
+      "count": 1,
+      "uniques": 1
+    }
+  ],
+  "top_paths": [
+    {
+      "path": "/iamtouchskyer/opc",
+      "count": 329,
+      "uniques": 155
+    },
+    {
+      "path": "/iamtouchskyer/opc/pulls",
+      "count": 26,
+      "uniques": 10
+    },
+    {
+      "path": "/iamtouchskyer/opc/tree/main",
+      "count": 23,
+      "uniques": 15
+    },
+    {
+      "path": "/iamtouchskyer/opc/blob/main/skill.md",
+      "count": 18,
+      "uniques": 10
+    },
+    {
+      "path": "/iamtouchskyer/opc/tree/main/roles",
+      "count": 15,
+      "uniques": 13
+    },
+    {
+      "path": "/iamtouchskyer/opc/pull/6",
+      "count": 14,
+      "uniques": 3
+    },
+    {
+      "path": "/iamtouchskyer/opc/tree/main/pipeline",
+      "count": 12,
+      "uniques": 11
+    },
+    {
+      "path": "/iamtouchskyer/opc/blob/main/README.md",
+      "count": 11,
+      "uniques": 6
+    },
+    {
+      "path": "/iamtouchskyer/opc/commits/main",
+      "count": 10,
+      "uniques": 7
+    },
+    {
+      "path": "/iamtouchskyer/opc/tree/main/bin",
+      "count": 10,
+      "uniques": 5
+    }
+  ],
+  "recent_issues": [
+    {
+      "number": 7,
+      "title": "docs: README missing ux-verdict, criteria-lint, and compound defense commands",
+      "author": "kagura-agent",
+      "created_at": "2026-04-15T07:17:46Z",
+      "comments": 0
+    },
+    {
+      "number": 4,
+      "title": "docs: onboarding friction — missing first-run guide + version mismatch",
+      "author": "kagura-agent",
+      "created_at": "2026-04-12T12:22:13Z",
+      "comments": 0
+    }
+  ],
+  "recent_stargazers": [
+    "ninjaoe",
+    "anneqzou",
+    "Saosing",
+    "lintan250",
+    "jshousm",
+    "lefkado",
+    "Yonokawa",
+    "alimeat",
+    "hty993",
+    "Beyondayday",
+    "juxindom",
+    "FortnueCutie",
+    "modelonly",
+    "xuri",
+    "imink",
+    "sunranlb",
+    "NSKevin",
+    "sealyu",
+    "laijiandong",
+    "huangjy",
+    "yuhaospark",
+    "xchunzhao",
+    "lucyannas",
+    "yuanjunz",
+    "uptutu",
+    "GuodLuckWang",
+    "AdenChen512",
+    "Zerrun",
+    "Mooncorns",
+    "luoyun0921"
+  ]
+}
